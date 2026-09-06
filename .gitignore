@@ -1,0 +1,39 @@
+# Environment files
+.env
+.env.local
+
+# Node / Hardhat
+node_modules/
+cache/
+artifacts/
+typechain/
+typechain-types/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# Deepface model weights cache
+.deepface/
+
+# Generated records and runtime cache
+records/*.json
+!records/.gitkeep
+records/crops/*
+!records/crops/.gitkeep
+records/debug/*
+!records/debug/.gitkeep
+
+# Streamlit
+.streamlit/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

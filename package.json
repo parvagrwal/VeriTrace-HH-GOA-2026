@@ -1,0 +1,26 @@
+{
+  "name": "veritrace",
+  "version": "1.0.0",
+  "description": "Reverse face search and on-chain verification pipeline for Polygon Amoy",
+  "license": "MIT",
+  "keywords": [
+    "polygon",
+    "amoy",
+    "web3",
+    "deepface",
+    "reverse-image-search",
+    "smart-contracts"
+  ],
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "node": "hardhat node",
+    "deploy:local": "hardhat run scripts/deploy.js --network hardhat",
+    "deploy:amoy": "hardhat run scripts/deploy.js --network amoy"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "dotenv": "^16.4.5",
+    "hardhat": "^2.22.10"
+  }
+}

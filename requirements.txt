@@ -1,0 +1,17 @@
+# Vision & Embeddings
+deepface>=0.0.92
+opencv-python-headless>=4.9.0.80
+pillow>=10.2.0
+numpy>=1.26.0
+tf-keras>=2.15.0
+
+# Search & APIs
+google-search-results>=2.4.2
+requests>=2.31.0
+
+# Blockchain
+web3>=6.15.0
+
+# App & Environment
+python-dotenv>=1.0.1
+streamlit>=1.32.0
