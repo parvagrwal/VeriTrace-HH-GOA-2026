@@ -15,10 +15,20 @@ from pathlib import Path
 from typing import Dict, Any, Optional, Tuple
 from PIL import Image
 
-try:
-    from deepface import DeepFace
-except ImportError:
-    DeepFace = None
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
+
+_DeepFace = None
+
+def _get_deepface():
+    global _DeepFace
+    if _DeepFace is None:
+        try:
+            from deepface import DeepFace
+            _DeepFace = DeepFace
+        except ImportError:
+            _DeepFace = False
+    return _DeepFace if _DeepFace is not False else None
 
 
 def detect_and_embed_face(
@@ -32,8 +42,10 @@ def detect_and_embed_face(
     if not os.path.exists(image_path):
         raise FileNotFoundError(f"Image not found at path: {image_path}")
 
+    DeepFace = _get_deepface()
     if DeepFace is None:
         raise ImportError("DeepFace is not installed. Please install it using requirements.txt.")
+
 
     os.makedirs(output_crop_dir, exist_ok=True)
     detectors = [detector_backend]
