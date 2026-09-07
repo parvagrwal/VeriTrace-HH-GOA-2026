@@ -733,9 +733,9 @@ st.markdown(
 
 st.markdown('''
 <div class="header-bar">
-    <span class="header-tag">Decentralized Provenance</span>
+    <span class="header-tag">Polygon Amoy Pipeline</span>
     <div class="app-title">VeriTrace</div>
-    <div class="app-subtitle">Facial Feature Matching &amp; Cryptographic Blockchain Anchoring</div>
+    <div class="app-subtitle">Face search &amp; blockchain verification</div>
 </div>
 ''', unsafe_allow_html=True)
 
@@ -784,7 +784,7 @@ col_left, col_right = st.columns([1, 1], gap="large")
 
 with col_left:
     st.markdown('''<div class="bento-card bento-card-gold">
-        <div class="bento-label">● Step 01 / Intake</div>
+        <div class="bento-label">Step 1: Input</div>
         <div class="bento-heading">Input Image</div>
     </div>''', unsafe_allow_html=True)
     sample_dir = Path("samples")
@@ -812,8 +812,8 @@ with col_left:
 
 with col_right:
     st.markdown('''<div class="bento-card bento-card-pink">
-        <div class="bento-label">● Step 01 / Target Preview</div>
-        <div class="bento-heading">Source Asset</div>
+        <div class="bento-label">Step 1: Preview</div>
+        <div class="bento-heading">Selected Image</div>
     </div>''', unsafe_allow_html=True)
     if selected_image_path:
         st.image(selected_image_path, caption="Active Target Image", use_container_width=True)
@@ -821,8 +821,8 @@ with col_right:
         st.markdown('''
         <div class="bento-card-muted" style="padding: 2.2rem 1.6rem; text-align: center; border-radius: 6px;">
             <div style="font-family: 'Space Mono', monospace; font-size: 0.78rem; color: var(--text-muted); letter-spacing: 1px; line-height: 1.6;">
-                AWAITING ASSET SELECTION<br/>
-                <span style="font-size: 0.7rem; color: #58806E;">Pick a sample from the library or upload a face image to preview</span>
+                NO IMAGE SELECTED<br/>
+                <span style="font-size: 0.7rem; color: #58806E;">Upload a photo or select a sample image to preview</span>
             </div>
         </div>
         ''', unsafe_allow_html=True)
@@ -956,36 +956,34 @@ if "pipeline_result" in st.session_state:
         if not has_valid_match:
             st.markdown('''
             <div class="bento-card bento-card-muted">
-                <div class="bento-label" style="color: var(--text-muted);">● Step 03 / Top Intelligence</div>
-                <div class="bento-heading" style="color: #88B8A0;">No Reverse Search Match Located</div>
+                <div class="bento-label" style="color: var(--text-muted);">Step 3: Web Search</div>
+                <div class="bento-heading" style="color: #88B8A0;">No Matching Posts Found</div>
                 <p style="color: #88B8A0; font-family: 'Space Mono', monospace; font-size: 0.76rem; margin: 10px 0 0 0; line-height: 1.5;">
-                    No indexed public web documents, social media entities, or news archives corresponded to the provided biometric embedding vector.
+                    No public web or social media posts matched this image in the search index.
                 </p>
             </div>
             ''', unsafe_allow_html=True)
         else:
             st.markdown('''
             <div class="bento-card bento-card-gold">
-                <div class="bento-label">● Step 03 / Top Intelligence</div>
-                <div class="bento-heading">Reverse Search Match</div>
+                <div class="bento-label">Step 3: Web Search</div>
+                <div class="bento-heading">Matching Post Found</div>
             </div>
             ''', unsafe_allow_html=True)
 
             tag_class = "tag-social" if top.get("is_social") else "tag-web"
-            tag_label = "Social Profile" if top.get("is_social") else "Public Web Document"
+            tag_label = "Social Post" if top.get("is_social") else "Web Page"
             conf_pct = int(top["confidence"] * 100)
 
-            # Single Hero Number Callout: Only Match Confidence gets oversized + kinetic treatment
-            # Candidate count gets subordinate static treatment
             st.markdown(f'''
             <div class="signpost-container">
                 <div class="signpost-box signpost-gold">
                     <div class="hero-number">{conf_pct}%</div>
-                    <div class="signpost-lbl">Confidence Match</div>
+                    <div class="signpost-lbl">Match Confidence</div>
                 </div>
                 <div class="signpost-box signpost-pink">
                     <div class="static-num static-num-pink">#{search.get("total_results", 0)}</div>
-                    <div class="signpost-lbl">Candidate Indices</div>
+                    <div class="signpost-lbl">Total Matches</div>
                 </div>
             </div>
             ''', unsafe_allow_html=True)
@@ -996,7 +994,7 @@ if "pipeline_result" in st.session_state:
             st.markdown(
                 f'<div style="font-family: \'Space Mono\', monospace; font-size: 0.78rem; margin: 8px 0 4px 0; color: var(--text-muted);">'
                 f'<strong style="color: var(--text-light);">Domain:</strong> <code style="color: var(--accent-gold);">{top["domain"]}</code> &nbsp;|&nbsp; '
-                f'<strong style="color: var(--text-light);">Engine:</strong> {top["source"]}'
+                f'<strong style="color: var(--text-light);">Source:</strong> {top["source"]}'
                 f'</div>',
                 unsafe_allow_html=True
             )
@@ -1019,8 +1017,8 @@ if "pipeline_result" in st.session_state:
     with bento_col2:
         st.markdown('''
         <div class="bento-card bento-card-pink">
-            <div class="bento-label">● Step 02 / Biometric Vector</div>
-            <div class="bento-heading">Face Analysis</div>
+            <div class="bento-label">Step 2: Face Detection</div>
+            <div class="bento-heading">Detected Face</div>
         </div>
         ''', unsafe_allow_html=True)
 
@@ -1028,15 +1026,14 @@ if "pipeline_result" in st.session_state:
         with f_col_img:
             st.image(face["face_crop_path"], caption=f"Crop ({face['detector_backend']})", use_container_width=True)
         with f_col_stats:
-            # Subordinate static numbers (no kinetic zoom)
             st.markdown(f'''
             <div class="signpost-box signpost-gold" style="margin-bottom: 8px;">
                 <div class="static-num">{face['embedding_dimensions']}</div>
-                <div class="signpost-lbl">Vector Floats</div>
+                <div class="signpost-lbl">Embedding Size</div>
             </div>
             <div class="signpost-box signpost-pink">
                 <div class="static-num static-num-pink">{face['confidence'] * 100:.0f}%</div>
-                <div class="signpost-lbl">Detect Confidence</div>
+                <div class="signpost-lbl">Detection Confidence</div>
             </div>
             ''', unsafe_allow_html=True)
             st.caption(f"Detector: `{face['detector_backend']}` | Model: `{face['model_name']}`")
@@ -1050,20 +1047,19 @@ if "pipeline_result" in st.session_state:
     bento_rec, bento_chain = st.columns([6, 6], gap="large")
 
     with bento_rec:
-        # Solid opaque canonical record (Card C)
         st.markdown('''
         <div class="bento-card bento-card-gold">
-            <div class="bento-label">● Step 04 / Immutable Proof</div>
+            <div class="bento-label">Step 4: Canonical Hash</div>
             <div class="bento-heading">Canonical Record</div>
         </div>
         ''', unsafe_allow_html=True)
         st.markdown(f"**Record ID:** `{res['canonical_payload']['record_id']}`")
-        st.markdown("**SHA-256 Cryptographic Hash:**")
+        st.markdown("**SHA-256 Digest:**")
         st.markdown(f'<div class="hash-code">0x{res["record_hash"]}</div>', unsafe_allow_html=True)
         st.json(res["canonical_payload"])
 
         st.download_button(
-            label="Download Signed JSON Ticket",
+            label="Download Record JSON",
             data=json.dumps(res["full_saved"], indent=2),
             file_name=f"record_{res['canonical_payload']['record_id']}.json",
             mime="application/json",
@@ -1074,7 +1070,7 @@ if "pipeline_result" in st.session_state:
         if tx:
             st.markdown('''
             <div class="bento-card bento-card-pink">
-                <div class="bento-label">● Step 05 / Smart Contract Provenance</div>
+                <div class="bento-label">● Step 05 / Blockchain Record</div>
                 <div class="bento-heading">Polygon Amoy Registry</div>
             </div>
             ''', unsafe_allow_html=True)
@@ -1090,7 +1086,7 @@ if "pipeline_result" in st.session_state:
         elif tx_error:
             st.markdown(f'''
             <div class="bento-card bento-card-alert">
-                <div class="bento-label" style="color: var(--accent-alert);">● Step 05 / Blockchain Write Failure</div>
+                <div class="bento-label" style="color: var(--accent-alert);">● Step 05 / Transaction Error</div>
                 <div class="bento-heading" style="color: #FFA5C8;">Transaction Failed</div>
                 <p style="color: #FFA5C8; font-family: 'Space Mono', monospace; font-size: 0.76rem; margin-bottom: 12px; word-break: break-all;">
                     ERROR: {tx_error}
@@ -1117,10 +1113,10 @@ if "pipeline_result" in st.session_state:
             # Muted variant for record-not-yet-published
             st.markdown('''
             <div class="bento-card bento-card-muted">
-                <div class="bento-label" style="color: var(--text-muted);">● Step 05 / Smart Contract Pending</div>
+                <div class="bento-label" style="color: var(--text-muted);">● Step 05 / Blockchain Record</div>
                 <div class="bento-heading" style="color: #88B8A0;">Record Not Yet Published</div>
                 <div style="font-family: 'Space Mono', monospace; font-size: 0.76rem; color: #88B8A0; margin-bottom: 12px; line-height: 1.4;">
-                    STATUS: CANONICAL DIGEST PREPARED • AWAITING ON-CHAIN ANCHORING
+                    Status: Canonical hash generated. Ready to anchor on Polygon Amoy.
                 </div>
             </div>
             ''', unsafe_allow_html=True)
@@ -1155,19 +1151,19 @@ if "pipeline_result" in st.session_state:
         # CARD E2: Action / Result Area + Tamper Simulation Test Mode
         st.markdown('''
         <div class="bento-card bento-card-pink">
-            <div class="bento-label">● Step 06 / Trust Engine</div>
-            <div class="bento-heading">Audit &amp; Integrity Controls</div>
+            <div class="bento-label">● Step 06 / Verification</div>
+            <div class="bento-heading">On-Chain Verification</div>
         </div>
         ''', unsafe_allow_html=True)
 
-        st.markdown('<span class="test-mode-chip">TEST MODE CONTROL</span>', unsafe_allow_html=True)
+        st.markdown('<span class="test-mode-chip">Test Mode</span>', unsafe_allow_html=True)
         simulate_tamper = st.checkbox(
-            "Simulate tampered payload (alters title & metadata to test mismatch detection)",
+            "Simulate tampered payload (tests if modifications are detected)",
             value=False,
             key="simulate_tamper_toggle"
         )
 
-        reverify_btn = st.button("Audit Record Integrity", type="primary", use_container_width=True)
+        reverify_btn = st.button("Verify Against Blockchain", type="primary", use_container_width=True)
 
         if reverify_btn:
             if not tx and not active_contract:
@@ -1200,23 +1196,23 @@ if "pipeline_result" in st.session_state:
             if v_res["is_valid"]:
                 st.markdown('''
                 <div class="alert-ok">
-                    <strong>AUTHENTIC RECORD CONFIRMED</strong><br/>
-                    Local hash perfectly matches Polygon Amoy on-chain registry state.
+                    <strong>RECORD VERIFIED</strong><br/>
+                    Local hash matches the immutable on-chain digest on Polygon Amoy.
                 </div>
                 ''', unsafe_allow_html=True)
             else:
                 st.markdown('''
                 <div class="alert-tamper">
-                    <strong>MISMATCH DETECTED / TAMPER ALERT</strong><br/>
-                    Local digest differs from the immutable smart contract record!
+                    <strong>TAMPER DETECTED</strong><br/>
+                    Local record hash differs from the anchored on-chain digest.
                 </div>
                 ''', unsafe_allow_html=True)
 
     with col_e1:
-        # CARD E1: Hash Comparison Only (Local Hash vs On-Chain Hash, side by side or stacked)
+        # CARD E1: Hash Comparison Only (Local Hash vs On-Chain Hash)
         st.markdown('''
         <div class="bento-card bento-card-gold">
-            <div class="bento-label">● Step 06 / Cryptographic Digest Comparison</div>
+            <div class="bento-label">● Step 06 / Integrity Check</div>
             <div class="bento-heading">Hash Comparison</div>
         </div>
         ''', unsafe_allow_html=True)
@@ -1232,16 +1228,16 @@ if "pipeline_result" in st.session_state:
             else:
                 onchain_hash_disp = "0x0000000000000000000000000000000000000000000000000000000000000000 (Pending Publication)"
 
-        st.markdown("**Local Record Digest:**")
+        st.markdown("**Local Record Hash:**")
         st.markdown(f'<div class="hash-code">{local_hash_disp}</div>', unsafe_allow_html=True)
 
-        st.markdown("**Immutable On-Chain Digest:**")
+        st.markdown("**On-Chain Digest:**")
         st.markdown(f'<div class="hash-code">{onchain_hash_disp}</div>', unsafe_allow_html=True)
 
         if v_res:
-            match_status = "MATCH CONFIRMED" if v_res["is_valid"] else "MISMATCH / CORRUPTED"
+            match_status = "MATCH CONFIRMED" if v_res["is_valid"] else "MISMATCH / TAMPERED"
             status_cls = "status-ok" if v_res["is_valid"] else "status-missing"
-            st.markdown(f'<span class="status-badge {status_cls}">DIGEST AUDIT: {match_status}</span>', unsafe_allow_html=True)
+            st.markdown(f'<span class="status-badge {status_cls}">Status: {match_status}</span>', unsafe_allow_html=True)
         else:
-            st.caption("Click 'Audit Record Integrity' to query live state from Polygon Amoy.")
+            st.caption("Click 'Verify Against Blockchain' to query live state from Polygon Amoy.")
 
