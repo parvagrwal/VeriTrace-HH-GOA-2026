@@ -45,7 +45,7 @@ jobs:
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install web3 python-dotenv requests pillow
+          pip install web3 python-dotenv requests pillow opencv-python-headless numpy
 
       - name: Run Hermetic Pipeline Unit Tests
         run: python -m unittest test_pipeline.py
